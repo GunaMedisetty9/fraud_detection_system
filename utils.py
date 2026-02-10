@@ -25,9 +25,23 @@ COLORS = {
 }
 
 def load_data():
-    """Load and cache the dataset"""
-    df = pd.read_csv('data/creditcard.csv')
-    return df
+    # Local full dataset (not committed to GitHub)
+    full = Path("data/creditcard.csv")
+    if full.exists():
+        return pd.read_csv(full)
+
+    # Cloud-friendly sample dataset (commit this)
+    sample = Path("data/creditcard_sample.csv")
+    if sample.exists():
+        return pd.read_csv(sample)
+
+    # Last fallback: test_data produced after training (commit this)
+    test = Path("models/test_data.csv")
+    if test.exists():
+        df = pd.read_csv(test)
+        return df.rename(columns={"Actual": "Class"})
+
+    raise FileNotFoundError("No dataset found.")
 
 def get_metrics(y_true, y_pred, y_prob=None):
     """Calculate all evaluation metrics"""
