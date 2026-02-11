@@ -24,24 +24,31 @@ COLORS = {
     'legitimate': '#2ecc71'
 }
 
+# utils.py
 from pathlib import Path
 import pandas as pd
 
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
+MODELS_DIR = BASE_DIR / "models"
+
 def load_data():
-    full = Path("data/creditcard.csv")
+    full = DATA_DIR / "creditcard.csv"
     if full.exists():
         return pd.read_csv(full)
 
-    sample = Path("data/creditcard_sample.csv")
+    sample = DATA_DIR / "creditcard_sample.csv"
     if sample.exists():
         return pd.read_csv(sample)
 
-    test = Path("models/test_data.csv")
+    test = MODELS_DIR / "test_data.csv"
     if test.exists():
         df = pd.read_csv(test)
         return df.rename(columns={"Actual": "Class"})
 
-    raise FileNotFoundError("No dataset found in data/ or models/.")
+    raise FileNotFoundError(
+        f"No dataset found. BASE_DIR={BASE_DIR}, data_files={list(DATA_DIR.glob('*'))}"
+    )
 
 def get_metrics(y_true, y_pred, y_prob=None):
     """Calculate all evaluation metrics"""

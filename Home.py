@@ -66,11 +66,18 @@ st.markdown('<p class="sub-header">AI-Powered Real-Time Transaction Monitoring &
 def get_data():
     return load_data()
 
+from pathlib import Path
+import os
+
 try:
-    df = get_data()
+    df = load_data()
     data_loaded = True
-except:
-    st.error("⚠️ Please ensure the dataset is placed in the 'data/' folder")
+except Exception as e:
+    st.error("⚠️ Dataset load failed (Cloud debug).")
+    st.exception(e)
+    st.write("CWD:", Path.cwd())
+    st.write("Root files:", os.listdir("."))
+    st.write("Data files:", os.listdir("data") if Path("data").exists() else "NO data folder")
     data_loaded = False
 
 if data_loaded:
