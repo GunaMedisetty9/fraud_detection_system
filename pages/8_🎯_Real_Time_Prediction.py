@@ -22,8 +22,16 @@ try:
     scaler = joblib.load('models/scaler.pkl')
     df = load_data()
 except Exception as e:
-    st.error("⚠️ Model loading failed (see error below).")
+    st.error("⚠️ Model loading failed (showing actual error below).")
     st.exception(e)
+
+    import os
+    from pathlib import Path
+    st.write("CWD:", Path.cwd())
+    st.write("models exists:", Path("models").exists())
+    if Path("models").exists():
+        st.write("models files:", os.listdir("models"))
+
     st.stop()
 
 # Model selection
