@@ -21,8 +21,9 @@ try:
     }
     scaler = joblib.load('models/scaler.pkl')
     df = load_data()
-except:
-    st.error("⚠️ Please run model_training.py first")
+except Exception as e:
+    st.error("⚠️ Model loading failed (see error below).")
+    st.exception(e)
     st.stop()
 
 # Model selection
